@@ -1,0 +1,129 @@
+name: ZephyriteCore
+version: '1.0'  # Replace with your actual version
+main: com.upfault.zephyritecore.ZephyriteCore
+api-version: '1.21'
+author: UpFault
+website: https://www.zephyritemc.com
+description: The core plugin for the Zephyrite Server.
+
+commands:
+  zephyrite:
+    description: Main command for the ZephyriteCore plugin.
+    usage: /zephyrite [about|reload]
+    aliases: [ zc ]
+    permission: zephyritecore.use
+    permission-message: You do not have permission to use this command.
+  condense:
+    description: Condense items into compact form.
+    usage: /condense
+    aliases: [ compact, compress ]
+    permission: zephyritecore.condense
+    permission-message: You do not have permission to use this command.
+  enchant:
+    description: Enchant the item in your hand.
+    usage: /enchant <enchantment> <level>
+    aliases: [ ench ]
+    permission: zephyritecore.enchant
+    permission-message: You do not have permission to use this command.
+  ec:
+    description: Open your Ender Chest.
+    usage: /ec
+    aliases: [ enderchest, ender ]
+    permission: zephyritecore.enderchest
+    permission-message: You do not have permission to use this command.
+  feed:
+    description: Restore your hunger to full.
+    usage: /feed
+    aliases: [ eat ]
+    permission: zephyritecore.feed
+    permission-message: You do not have permission to use this command.
+  fly:
+    description: Toggle fly mode.
+    usage: /fly
+    aliases: [ togglefly ]
+    permission: zephyritecore.fly
+    permission-message: You do not have permission to use this command.
+  flyspeed:
+    description: Set your flying speed.
+    usage: /flyspeed <speed>
+    aliases: [ fspeed ]
+    permission: zephyritecore.flyspeed
+    permission-message: You do not have permission to use this command.
+  gamemode:
+    description: Set your game mode.
+    usage: /gamemode <mode>
+    aliases: [ gmc, gms, gma, gmsp ]
+    permission: zephyritecore.gamemode
+    permission-message: You do not have permission to use this command.
+  hat:
+    description: Wear the item in your hand as a hat.
+    usage: /hat
+    aliases: [ wearhat ]
+    permission: zephyritecore.hat
+    permission-message: You do not have permission to use this command.
+  itemgive:
+    description: Give yourself an item.
+    usage: /itemgive <item> [amount]
+    aliases: [ i, giveitem ]
+    permission: zephyritecore.itemgive
+    permission-message: You do not have permission to use this command.
+  itemrename:
+    description: Rename the item in your hand.
+    usage: /itemrename <name>
+    aliases: [ rename, nameitem ]
+    permission: zephyritecore.rename
+    permission-message: You do not have permission to use this command.
+  spawn:
+    description: Spawn entities.
+    usage: /spawn <entity> <amount>
+    aliases: [ summon ]
+    permission: zephyritecore.spawn
+    permission-message: You do not have permission to use this command.
+  speed:
+    description: Set your walking speed.
+    usage: /speed <amount>
+    aliases: [ walkspeed ]
+    permission: zephyritecore.speed
+    permission-message: You do not have permission to use this command.
+  suicide:
+    description: Kill yourself.
+    usage: /suicide
+    aliases: [ killme, perish ]
+    permission: zephyritecore.suicide
+    permission-message: You do not have permission to use this command.
+  weather:
+    description: Change the weather in the world.
+    usage: /weather <rain/clear/storm>
+    aliases: [rain, clear, storm]
+    permission: zephyritecore.weather
+    permission-message: You do not have permission to use this command.
+  time:
+    description: Set the time in the world.
+    usage: /time <day/night/morning/dawn>
+    aliases: [day, night, morning, dawn]
+    permission: zephyritecore.time
+    permission-message: You do not have permission to use this command.
+  top:
+    description: Teleport to the highest block at your position.
+    usage: /top
+    aliases: [ gotop ]
+    permission: zephyritecore.top
+    permission-message: You do not have permission to use this command.
+  tpall:
+    description: Teleport all players to your location.
+    usage: /tpall
+    aliases: [ bringall ]
+    permission: zephyritecore.tpall
+    permission-message: You do not have permission to use this command.
+  tp:
+    description: Teleport to another player.
+    usage: /tp <player>
+    aliases: [ teleport ]
+    permission: zephyritecore.tp
+    permission-message: You do not have permission to use this command.
+  whois:
+    description: Get information about a player.
+    usage: /whois <player>
+    aliases: [ playerinfo ]
+    permission: zephyritecore.whois
+    permission-message: You do not have permission to use this command.

@@ -1,0 +1,9 @@
+<project name="ZephriteCore" default="Build">
+
+    <xmlproperty file="pom.xml" prefix="pom" keeproot="false" />
+
+    <target name="Build">
+        <property name="project.version" value="${pom.version}" />
+        <copy file="./target/ZephyriteCore-${project.version}-shaded.jar" tofile="C:\Users\johia\OneDrive\Desktop\ZephyriteNetwork\Zephyrite\plugins\${ant.project.name}.jar" />
+    </target>
+</project>

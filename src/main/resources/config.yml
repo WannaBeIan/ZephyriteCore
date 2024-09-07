@@ -1,0 +1,15 @@
+#####################################################################
+#                                                                   #
+#                 DO NOT TOUCH ANYTHING IN HERE UNLESS              #
+#                 YOU ACTUALLY KNOW WHAT YOU'RE DOING               #
+#                          THINGS WILL BREAK.                       #
+#                                                                   #
+#####################################################################
+
+# MySQL configuration for ZephyriteCore Plugin
+mysql:
+  host: localhost
+  port: 3306
+  database: zephyrite
+  username: upfault
+  password: jgltwcpledivzdumf*O8
