@@ -5,6 +5,7 @@ import com.upfault.zephyritecore.commands.ZephyriteCommand;
 import com.upfault.zephyritecore.commands.utility.*;
 import com.upfault.zephyritecore.events.*;
 import com.upfault.zephyritecore.utils.DatabaseManager;
+import com.upfault.zephyritecore.utils.RestartListener;
 import fr.mrmicky.fastboard.FastBoard;
 import lombok.Getter;
 import org.bukkit.command.CommandExecutor;
@@ -33,6 +34,8 @@ public final class ZephyriteCore extends JavaPlugin {
 
         commandRegister();
         eventRegister();
+
+        new RestartListener().startListening();
 
         getServer().getScheduler().runTaskTimer(this, () -> {
             for (FastBoard board : LobbyScoreboard.boards.values()) {
