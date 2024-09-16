@@ -2,6 +2,7 @@ package com.upfault.zephyritecore.api.scoreboard;
 
 import com.upfault.zephyritecore.ZephyriteCore;
 import com.upfault.zephyritecore.utils.DatabaseManager;
+import com.upfault.zephyritecore.utils.ScoreboardUtils;
 import fr.mrmicky.fastboard.FastBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,7 +34,7 @@ public class LobbyScoreboard {
 		lines.add(ChatColor.GOLD + "Lobby: " + ChatColor.WHITE + getLobbyPlayerCount());
 		lines.add(ChatColor.GOLD + "Players: " + ChatColor.WHITE + getTotalPlayers());
 		lines.add(ChatColor.DARK_GRAY + "   ");
-		lines.add(ChatColor.GOLD + "Friends Online: " + ChatColor.WHITE + getFriendsOnline());
+		lines.add(ChatColor.GOLD + "Friends Online: " + ChatColor.WHITE + getFriendsOnline(player));
 		lines.add(ChatColor.DARK_GRAY + "    ");
 		lines.add(WEBSITE);
 
@@ -56,7 +57,7 @@ public class LobbyScoreboard {
 		lines.add(ChatColor.GOLD + "Lobby: " + ChatColor.WHITE + getLobbyPlayerCount());
 		lines.add(ChatColor.GOLD + "Players: " + ChatColor.WHITE + getTotalPlayers());
 		lines.add(ChatColor.DARK_GRAY + "   ");
-		lines.add(ChatColor.GOLD + "Friends Online: " + ChatColor.WHITE + getFriendsOnline());
+		lines.add(ChatColor.GOLD + "Friends Online: " + ChatColor.WHITE + getFriendsOnline(player));
 		lines.add(ChatColor.DARK_GRAY + "    ");
 		lines.add(WEBSITE);
 
@@ -64,15 +65,15 @@ public class LobbyScoreboard {
 	}
 
 	private static String getPlayerRank(Player player) {
-		return databaseManager.getPlayerRank(player.getUniqueId());
+		return databaseManager.getPlayerField(player.getUniqueId(), "player_rank", String.class, "None");
 	}
 
 	private static int getPlayerLevel(Player player) {
-		return databaseManager.getPlayerLevel(player.getUniqueId());
+		return databaseManager.getPlayerFieldFromStats(player.getUniqueId(), "level", Integer.class, 1);
 	}
 
 	private static int getPlayerCoins(Player player) {
-		return databaseManager.getPlayerCoins(player.getUniqueId());
+		return databaseManager.getPlayerFieldFromStats(player.getUniqueId(), "coins", Integer.class, 0);
 	}
 
 	private static int getLobbyPlayerCount() {
@@ -80,11 +81,12 @@ public class LobbyScoreboard {
 	}
 
 	private static int getTotalPlayers() {
-		return Bukkit.getServer().getOnlinePlayers().size();
+		ScoreboardUtils.requestTotalPlayers();
+		return ScoreboardUtils.totalPlayers;
 	}
 
-	private static int getFriendsOnline() {
-		return 5;
+	private static int getFriendsOnline(Player player) {
+		return databaseManager.getOnlineFriends(player.getUniqueId());
 	}
 
 	public static void removeScoreboard(Player player) {

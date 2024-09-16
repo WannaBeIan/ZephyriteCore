@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 public class PlayerJoinListener implements Listener {
 
@@ -34,12 +35,21 @@ public class PlayerJoinListener implements Listener {
 	}
 
 	private void applyJoinProcedures(Player player) {
+		UUID playerUUID = player.getUniqueId();
+		String playerName = player.getName();
+
+		if (!databaseManager.playerExists(playerUUID)) {
+			databaseManager.addPlayer(playerUUID, playerName);
+		} else {
+			databaseManager.updatePlayerField(playerUUID, "last_login", System.currentTimeMillis());
+		}
+
 		LobbyScoreboard.applyScoreboard(player);
-		databaseManager.addPlayer(player.getUniqueId(), player.getName());
 	}
 
+
 	private String generateJoinMessage(Player player) {
-		String rank = databaseManager.getPlayerRank(player.getUniqueId());
+		String rank = databaseManager.getPlayerField(player.getUniqueId(), "player_rank", String.class, "None");
 		String playerName = player.getName();
 		String randomMessage = joinMessages.get(random.nextInt(joinMessages.size()));
 

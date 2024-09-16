@@ -1,4 +1,4 @@
-<project name="ZephriteCore" default="Build">
+<project name="ZephyriteCore" default="Build">
 
     <xmlproperty file="pom.xml" prefix="pom" keeproot="false" />
 

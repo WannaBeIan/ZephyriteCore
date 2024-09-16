@@ -2,70 +2,83 @@ package com.upfault.zephyritecore.utils;
 
 import com.upfault.zephyritecore.ZephyriteCore;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class RestartListener {
+
+	private static final String RESTART_URL = "http://localhost:3000/restart";
+	private static final String EXPECTED_MESSAGE = "restarting";
+	private boolean countdownStarted = false;
+
 	public void startListening() {
-		int port = 8080;
-		try (ServerSocket serverSocket = new ServerSocket(port)) {
-			ZephyriteCore.getPlugin().getLogger().info("Plugin listening for restart notification on port " + port);
+		Bukkit.getScheduler().runTaskTimerAsynchronously(ZephyriteCore.getPlugin(), () -> {
+			try {
+				URL url = new URL(RESTART_URL);
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("GET");
+				connection.setRequestProperty("Accept", "application/json");
 
-			while (!serverSocket.isClosed()) {
-				try (Socket clientSocket = serverSocket.accept()) {
-					handleRequest(clientSocket);
-				} catch (IOException e) {
-					ZephyriteCore.getPlugin().getLogger().warning(e.getLocalizedMessage());
+				int code = connection.getResponseCode();
+				if (code == HttpURLConnection.HTTP_OK) {
+					BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					StringBuilder response = new StringBuilder();
+					String inputLine;
+					while ((inputLine = in.readLine()) != null) {
+						response.append(inputLine);
+					}
+					in.close();
+
+					if (response.toString().contains(EXPECTED_MESSAGE) && !countdownStarted) {
+						startCountdown();  // Start the countdown when the message is detected
+						countdownStarted = true;
+					}
+				} else {
+					ZephyriteCore.getPlugin().getLogger().warning("Error: Server returned code " + code);
 				}
+			} catch (Exception e) {
+				ZephyriteCore.getPlugin().getLogger().warning("Error checking restart message: " + e.getMessage());
 			}
-		} catch (IOException e) {
-			ZephyriteCore.getPlugin().getLogger().warning(e.getLocalizedMessage());
-		}
-	}
-
-	private void handleRequest(Socket clientSocket) {
-		try (BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			 PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true)) {
-
-			StringBuilder body = new StringBuilder();
-			String inputLine;
-			while ((inputLine = in.readLine()) != null) {
-				body.append(inputLine);
-				if (inputLine.isEmpty()) break;
-			}
-
-			if (body.toString().contains("Server restarting in 30 seconds...")) {
-				startCountdown();
-			}
-
-			out.println("HTTP/1.1 200 OK");
-			out.println("Content-Type: text/plain");
-			out.println("Content-Length: 0");
-			out.println();
-		} catch (IOException e) {
-			ZephyriteCore.getPlugin().getLogger().warning(e.getLocalizedMessage());
-		}
+		}, 0L, 20L);
 	}
 
 	private void startCountdown() {
-		Bukkit.getScheduler().runTaskTimerAsynchronously(ZephyriteCore.getPlugin(), new Runnable() {
+
+		Bukkit.broadcastMessage("§c[Important] §eThis proxy will restart soon: §bFor a game update §eYou have §a30 seconds §eto disconnect.");
+
+		Bukkit.getScheduler().runTaskTimer(ZephyriteCore.getPlugin(), new Runnable() {
 			int countdown = 30;
+
+
 
 			@Override
 			public void run() {
-				if (countdown > 0) {
-					if (countdown == 30 || countdown == 15 || countdown <= 10) {
-						Bukkit.getOnlinePlayers().forEach(player ->
-								player.sendTitle("§e§lSERVER REBOOT!", "§aFor a game update" + "§7(in §e" + countdown + "s§7) ", 10, Integer.MAX_VALUE, 20));
-					}
-					countdown--;
+
+				if (countdown == 0) {
+					Bukkit.getScheduler().runTask(ZephyriteCore.getPlugin(), () -> {
+						for (Player player : Bukkit.getOnlinePlayers()) {
+							player.kickPlayer("§cProxy Restarting. Try connecting again later!");
+						}
+					});
+					countdownStarted = false;
+					return;
 				}
+
+
+				if (countdown == 30 || countdown == 15 || countdown <= 10) {
+					String subtitle = "§aFor a game update §7(in §e" + countdown + "s§7)";
+					for (Player player : Bukkit.getOnlinePlayers()) {
+						player.sendTitle("§e§lSERVER REBOOT!", subtitle, 0, 40, 0);
+					}
+				}
+
+				countdown--;
 			}
+
 		}, 0L, 20L);
 	}
 }

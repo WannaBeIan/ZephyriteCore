@@ -1,5 +1,5 @@
 name: ZephyriteCore
-version: '1.0'  # Replace with your actual version
+version: '${project.version}'
 main: com.upfault.zephyritecore.ZephyriteCore
 api-version: '1.21'
 author: UpFault

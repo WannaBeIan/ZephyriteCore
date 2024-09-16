@@ -48,53 +48,53 @@ public final class ZephyriteCore extends JavaPlugin {
     private void eventRegister() {
         getServer().getPluginManager().registerEvents(new PlayerJoinListener(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuitListener(), this);
-        getServer().getPluginManager().registerEvents(new ServerPingListener(), this);
         getServer().getPluginManager().registerEvents(new LobbyProtectionListener(), this);
+
         getServer().getMessenger().registerOutgoingPluginChannel(this, "velocity:player_info");
         getServer().getMessenger().registerIncomingPluginChannel(this, "velocity:player_info", new PlayerInfoResponseListener(databaseManager));
+
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "velocity:main");
+        getServer().getMessenger().registerIncomingPluginChannel(this, "velocity:main", new PlayerInfoResponseListener(databaseManager));
     }
+
 
     private void commandRegister() {
-        Map<String, CommandExecutor> commandExecutors = new HashMap<>();
-        commandExecutors.put("zephyrite", new ZephyriteCommand(this));
-        commandExecutors.put("condense", new CondenseCommand());
-        commandExecutors.put("enchant", new EnchantCommand());
-        commandExecutors.put("ec", new EnderChestCommand());
-        commandExecutors.put("feed", new FeedCommand());
-        commandExecutors.put("fly", new FlyCommand());
-        commandExecutors.put("flyspeed", new FlySpeedCommand());
-        commandExecutors.put("gamemode", new GameModeCommand());
-        commandExecutors.put("hat", new HatCommand());
-        commandExecutors.put("itemgive", new ItemGiveCommand());
-        commandExecutors.put("itemrename", new RenameCommand());
-        commandExecutors.put("spawn", new SpawnCommand());
-        commandExecutors.put("speed", new SpeedCommand());
-        commandExecutors.put("suicide", new SuicideCommand());
-        commandExecutors.put("time", new TimeCommand());
-        commandExecutors.put("top", new TopCommand());
-        commandExecutors.put("tpall", new TpAllCommand());
-        commandExecutors.put("tp", new TpCommand());
-        commandExecutors.put("weather", new WeatherCommand());
-        commandExecutors.put("whois", new WhoisCommand());
-        Map<String, TabCompleter> tabCompleters = new HashMap<>();
-        tabCompleters.put("zephyrite", new ZephyriteCommand(this));
-        tabCompleters.put("enchant", new EnchantCommand());
-        tabCompleters.put("spawn", new SpawnCommand());
-        tabCompleters.put("speed", new SpeedCommand());
-        tabCompleters.put("flyspeed", new FlySpeedCommand());
-        tabCompleters.put("time", new TimeCommand());
-        tabCompleters.put("weather", new WeatherCommand());
-        tabCompleters.put("gamemode", new GameModeCommand());
+        Map<String, Object[]> commandMap = new HashMap<>();
 
+        commandMap.put("zephyrite", new Object[] {new ZephyriteCommand(this), new ZephyriteCommand(this)});
+        commandMap.put("condense", new Object[] {new CondenseCommand(), null});
+        commandMap.put("enchant", new Object[] {new EnchantCommand(), new EnchantCommand()});
+        commandMap.put("ec", new Object[] {new EnderChestCommand(), null});
+        commandMap.put("feed", new Object[] {new FeedCommand(), null});
+        commandMap.put("fly", new Object[] {new FlyCommand(), null});
+        commandMap.put("flyspeed", new Object[] {new FlySpeedCommand(), new FlySpeedCommand()});
+        commandMap.put("gamemode", new Object[] {new GameModeCommand(), new GameModeCommand()});
+        commandMap.put("hat", new Object[] {new HatCommand(), null});
+        commandMap.put("itemgive", new Object[] {new ItemGiveCommand(), null});
+        commandMap.put("itemrename", new Object[] {new RenameCommand(), null});
+        commandMap.put("spawn", new Object[] {new SpawnCommand(), new SpawnCommand()});
+        commandMap.put("speed", new Object[] {new SpeedCommand(), new SpeedCommand()});
+        commandMap.put("suicide", new Object[] {new SuicideCommand(), null});
+        commandMap.put("time", new Object[] {new TimeCommand(), new TimeCommand()});
+        commandMap.put("top", new Object[] {new TopCommand(), null});
+        commandMap.put("tpall", new Object[] {new TpAllCommand(), null});
+        commandMap.put("tp", new Object[] {new TpCommand(), null});
+        commandMap.put("weather", new Object[] {new WeatherCommand(), new WeatherCommand()});
+        commandMap.put("whois", new Object[] {new WhoisCommand(), null});
 
-        for (Map.Entry<String, CommandExecutor> entry : commandExecutors.entrySet()) {
-            Objects.requireNonNull(getCommand(entry.getKey())).setExecutor(entry.getValue());
-        }
+        for (Map.Entry<String, Object[]> entry : commandMap.entrySet()) {
+            String commandName = entry.getKey();
+            CommandExecutor executor = (CommandExecutor) entry.getValue()[0];
+            TabCompleter tabCompleter = (TabCompleter) entry.getValue()[1];
 
-        for (Map.Entry<String, TabCompleter> entry : tabCompleters.entrySet()) {
-            Objects.requireNonNull(getCommand(entry.getKey())).setTabCompleter(entry.getValue());
+            Objects.requireNonNull(getCommand(commandName)).setExecutor(executor);
+
+            if (tabCompleter != null) {
+                Objects.requireNonNull(getCommand(commandName)).setTabCompleter(tabCompleter);
+            }
         }
     }
+
 
     @Override
     public void onDisable() {
