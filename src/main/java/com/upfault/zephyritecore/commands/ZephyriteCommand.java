@@ -31,7 +31,7 @@ public class ZephyriteCommand implements CommandExecutor, TabCompleter {
 		if (args[0].equalsIgnoreCase("about")) {
 			sender.sendMessage(ChatColor.AQUA + "ZephyriteCore " + ChatColor.GOLD + "Plugin Information:");
 			sender.sendMessage(ChatColor.BLUE + "Version: " + ChatColor.YELLOW + plugin.getDescription().getVersion());
-			sender.sendMessage(ChatColor.BLUE + "Developer: " + ChatColor.YELLOW + plugin.getDescription().getAuthors().toString());
+			sender.sendMessage(ChatColor.BLUE + "Developer: " + ChatColor.YELLOW + plugin.getDescription().getAuthors());
 			sender.sendMessage(ChatColor.BLUE + "Description: " + ChatColor.YELLOW + plugin.getDescription().getDescription());
 			sender.sendMessage(ChatColor.BLUE + "Website: " + ChatColor.YELLOW + plugin.getDescription().getWebsite());
 			sender.sendMessage(ChatColor.BLUE + "Support: " + ChatColor.YELLOW + plugin.getDescription().getWebsite() + "/help");

@@ -19,14 +19,12 @@ public class PlayerQuitListener implements Listener {
 		Player player = event.getPlayer();
 		UUID playerUUID = player.getUniqueId();
 
-		// Update the player's last_logout time
 		if (databaseManager.playerExists(playerUUID)) {
 			databaseManager.updatePlayerField(playerUUID, "last_logout", System.currentTimeMillis());
 		} else {
 			ZephyriteCore.getPlugin().getLogger().warning("Player not found in database on quit: " + playerUUID);
 		}
 
-		// Remove the scoreboard
 		LobbyScoreboard.removeScoreboard(player);
 	}
 

@@ -1,5 +1,6 @@
 package com.upfault.zephyritecore.utils;
 
+import com.upfault.zephyritecore.ZephyriteCore;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -27,7 +28,11 @@ public class ScoreboardUtils {
 					"velocity:main", byteArrayStream.toByteArray());
 
 		} catch (Exception e) {
-			Bukkit.getLogger().warning("Failed to request total player count: " + e.getMessage());
+			ZephyriteCore.getPlugin().getLogger().warning("Failed to request total player count: " + e.getMessage());
 		}
+	}
+
+	public static void updateTotalPlayers(int newTotalPlayers) {
+		totalPlayers = newTotalPlayers;
 	}
 }

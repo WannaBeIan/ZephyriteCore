@@ -34,7 +34,7 @@ public class RestartListener {
 					in.close();
 
 					if (response.toString().contains(EXPECTED_MESSAGE) && !countdownStarted) {
-						startCountdown();  // Start the countdown when the message is detected
+						startCountdown();
 						countdownStarted = true;
 					}
 				} else {

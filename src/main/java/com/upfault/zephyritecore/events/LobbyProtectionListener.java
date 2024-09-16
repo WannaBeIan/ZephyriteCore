@@ -37,8 +37,7 @@ public class LobbyProtectionListener implements Listener {
 
 	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
-		if (event.getEntity() instanceof Player) {
-			Player player = (Player) event.getEntity();
+		if (event.getEntity() instanceof Player player) {
 			if (isLobbyWorld(player.getWorld().getName())) {
 				event.setCancelled(true);
 			}
@@ -83,11 +82,7 @@ public class LobbyProtectionListener implements Listener {
 	public void onWeatherChange(WeatherChangeEvent event) {
 		World world = event.getWorld();
 		if (isLobbyWorld(world.getName())) {
-			if (event.getCause() == WeatherChangeEvent.Cause.PLUGIN || event.getCause() == WeatherChangeEvent.Cause.COMMAND) {
-				event.setCancelled(false);
-			} else {
-				event.setCancelled(true);
-			}
+			event.setCancelled(event.getCause() != WeatherChangeEvent.Cause.PLUGIN && event.getCause() != WeatherChangeEvent.Cause.COMMAND);
 		}
 	}
 

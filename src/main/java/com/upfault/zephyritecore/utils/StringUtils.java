@@ -13,11 +13,7 @@ public class StringUtils {
 			return text;
 		}
 
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < padding; i++) {
-			sb.append(" ");
-		}
-		sb.append(text);
-		return sb.toString();
+		return " ".repeat(padding) +
+				text;
 	}
 }
